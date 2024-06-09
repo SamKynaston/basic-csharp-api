@@ -29,5 +29,31 @@ namespace AccountsAPI.Controllers
 
             return Conflict("Account already exists");
         } 
+
+        [HttpPatch]
+        public ActionResult Patch(AccountObj account)
+        {
+            var existingAccount = Accounts.Find(x => x.Id == account.Id);
+
+            if (existingAccount == null) {
+                return BadRequest("Object does not exist");
+            }
+
+            existingAccount.Username = account.Username;
+            return Ok();
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(AccountObj account) 
+        {
+            var existingAccount = Accounts.Find(x => x.Id == account.Id);
+
+            if (existingAccount == null) {
+                return BadRequest("Object does not exist");
+            }
+
+            Accounts.Remove(account);
+            return NoContent();
+        }
     }
 }
