@@ -18,5 +18,16 @@ namespace AccountsAPI.Controllers
         {
             return Ok(Accounts);
         }
+
+        [HttpPost]
+        public ActionResult Post(AccountObj account) 
+        {
+            if (Accounts.Find(x => x.Id == account.Id) == null) {
+                Accounts.Add(account);
+                return Created(Request.Path.ToString() + '/' + account.Id, account);
+            }
+
+            return Conflict("Account already exists");
+        } 
     }
 }
