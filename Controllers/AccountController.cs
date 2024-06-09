@@ -12,5 +12,11 @@ namespace AccountsAPI.Controllers
         {
             new AccountObj {Id = 1, Username = "Test"}
         };
+
+        [HttpGet]
+        public ActionResult<List<AccountObj>> Get()
+        {
+            return Ok(Accounts);
+        }
     }
 }
