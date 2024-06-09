@@ -44,15 +44,15 @@ namespace AccountsAPI.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(AccountObj account) 
+        public ActionResult Delete(int id) 
         {
-            var existingAccount = Accounts.Find(x => x.Id == account.Id);
+            var existingAccount = Accounts.Find(x => x.Id == id);
 
             if (existingAccount == null) {
                 return BadRequest("Object does not exist");
             }
 
-            Accounts.Remove(account);
+            Accounts.Remove(existingAccount);
             return NoContent();
         }
     }
