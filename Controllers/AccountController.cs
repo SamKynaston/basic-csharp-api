@@ -5,13 +5,28 @@ using Microsoft.AspNetCore.Mvc;
 namespace AccountsAPI.Controllers 
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     public class AccountsController: ControllerBase
     {
         private static List<AccountObj> Accounts = new List<AccountObj>
         {
             new AccountObj {Id = 1, Username = "Test"}
         };
+
+        private AccountObj CreateAccount(string username)
+        {
+
+            var id = Accounts.Any() ? Accounts.Max(x => x.Id) : 1;
+
+            AccountObj NewAccount = new AccountObj { 
+                Id = id + 1,
+                Username = username
+            };
+
+            Accounts.Add(NewAccount);
+
+            return NewAccount;
+        }
 
         [HttpGet]
         public ActionResult<List<AccountObj>> Get()
@@ -20,14 +35,10 @@ namespace AccountsAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(AccountObj account) 
+        public ActionResult Post(string username) 
         {
-            if (Accounts.Find(x => x.Id == account.Id) == null) {
-                Accounts.Add(account);
-                return Created(Request.Path.ToString() + '/' + account.Id, account);
-            }
-
-            return Conflict("Account already exists");
+            AccountObj newAccount = CreateAccount(username);
+            return Created(Request.Path.ToString() + '/' + newAccount.Id, newAccount);
         } 
 
         [HttpPatch]
